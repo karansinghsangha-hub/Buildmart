@@ -1,0 +1,75 @@
+name: Deploy web/ to GitHub Pages
+
+# This deploys ONLY the React/TypeScript/Tailwind/shadcn app in /web.
+# The original static site at the repo root (index.html, about.html, etc.)
+# is not touched by this workflow and is not part of this deployment.
+
+on:
+  push:
+    branches:
+      - claude/new-session-lna9ob
+    paths:
+      # Only rebuild when the React app (or this workflow) actually changes.
+      - "web/**"
+      - ".github/workflows/deploy-pages.yml"
+  # Lets you trigger a deploy manually from the Actions tab without pushing
+  # a commit — e.g. to redeploy after changing the Pages source setting.
+  workflow_dispatch:
+
+# GitHub Pages deployments should never run two at once; if a new push
+# comes in while one is running, cancel the older, superseded run.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export (base path /Buildmart)
+        run: npm run build:pages
+        env:
+          NEXT_BASE_PATH: /Buildmart
+
+      - name: Add .nojekyll
+        # Without this, GitHub Pages runs the output through Jekyll, which
+        # ignores any path starting with an underscore — silently dropping
+        # the entire /_next asset folder (all JS/CSS/fonts) from the deploy.
+        run: touch out/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

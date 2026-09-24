@@ -102,3 +102,41 @@ npm run dev   # http://localhost:3000
 
 `npm run build` has been verified to pass (typecheck + production build,
 all 3 routes prerendered as static content).
+
+## Deploying to GitHub Pages
+
+This app is deployed to `https://karansinghsangha-hub.github.io/Buildmart/`
+by `.github/workflows/deploy-pages.yml` (repo root), which builds **only**
+`web/` and publishes its static export — the root-level static site
+(`index.html`, `about.html`, etc.) is untouched by this workflow.
+
+- `next.config.ts` sets `output: "export"` (Next.js emits a plain
+  HTML/CSS/JS `out/` folder instead of needing a Node server, since GitHub
+  Pages can only serve static files) plus `basePath`/`assetPrefix`, read
+  from the `NEXT_BASE_PATH` env var. The workflow sets
+  `NEXT_BASE_PATH=/Buildmart` — the repo name — so every asset URL and
+  internal link resolves correctly under the `/Buildmart/` subpath GitHub
+  Pages serves this project at. Locally, `npm run dev` / `npm run build`
+  leave `NEXT_BASE_PATH` unset and behave like a normal root-hosted app;
+  `npm run build:pages` reproduces the exact production build (with the
+  base path) for local testing.
+- `trailingSlash: true` emits `/about/index.html` instead of `/about.html`,
+  so `/about/`-style links resolve on a plain static file server.
+- The workflow adds a `.nojekyll` file to the build output before
+  publishing — without it, GitHub Pages' Jekyll processing ignores the
+  `_next` folder (anything starting with `_`), which would silently drop
+  every JS/CSS/font file from the deploy.
+
+### One manual step required
+
+GitHub Actions can publish to Pages, but it can't flip the **Pages source**
+setting for you — that has to be done once, by hand, in the repo's own
+settings:
+
+1. On GitHub: **Settings → Pages**.
+2. Under **Build and deployment → Source**, change it from "Deploy from a
+   branch" to **"GitHub Actions"**.
+
+Once that's set, every push to `claude/new-session-lna9ob` that touches
+`web/**` re-triggers this workflow and redeploys automatically — no further
+manual steps.
