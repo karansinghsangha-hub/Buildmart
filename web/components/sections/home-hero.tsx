@@ -87,22 +87,49 @@ export function HomeHero() {
       scrollLength={2.2}
       fontFamily={portalFont}
       fontWeight={700}
-      enterLabel="Enter BuildMart"
+      enterLabel="Skip to content"
+      className="bm-portal"
       style={portalStyle}
       background={navyField}
       front={
-        <div className="flex h-full flex-col items-center justify-start px-6 pt-16 text-center sm:pt-24">
-          <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#a9803f] before:h-px before:w-6 before:bg-[#a9803f] after:h-px after:w-6 after:bg-[#a9803f]">
-            Est. 2019 · Built on Trust
-          </span>
-          <h1 className="mt-4 max-w-2xl font-display text-3xl font-semibold tracking-tight text-[#171b20] sm:text-4xl">
-            We build spaces that outlast the blueprint.
-          </h1>
-          <p className="mx-auto mt-3 max-w-md text-balance text-sm text-[#171b20]/65">
-            Scroll to step through the &ldquo;M&rdquo; — or pick any letter below — and
-            into BuildMart&apos;s story.
-          </p>
-        </div>
+        <>
+          {/* Confined to the exact band above the word (GlyphPortal measures
+              the glyph and publishes its top edge as --gp-word-top) and
+              bottom-anchored, so this copy can never overlap "BUILDMART"
+              no matter how short the real viewport is — a fixed padding
+              value only happened to clear it at the one height I tested. */}
+          <div
+            className="absolute inset-x-0 top-0 flex flex-col items-center justify-end gap-2 px-6 pb-6 text-center sm:pb-10"
+            style={{ height: "var(--gp-word-top, 42%)" }}
+          >
+            <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#a9803f] before:h-px before:w-6 before:bg-[#a9803f] after:h-px after:w-6 after:bg-[#a9803f]">
+              Est. 2019 · Built on Trust
+            </span>
+            <h1 className="max-w-2xl text-balance font-display text-2xl font-semibold tracking-tight text-[#171b20] sm:text-4xl">
+              We build spaces that outlast the blueprint.
+            </h1>
+            <p className="mx-auto hidden max-w-md text-sm text-[#171b20]/65 sm:block">
+              Scroll to step through the &ldquo;M&rdquo; — or pick any letter below — and
+              into BuildMart&apos;s story.
+            </p>
+          </div>
+          <style>{`
+            /* The vendor component ships its "enter" link as bare inline
+               text (no button chrome) — style it as a real brass button
+               here instead of leaving it looking like a stray line. */
+            .bm-portal [data-gp-enter] {
+              border-radius: 999px;
+              background: #a9803f;
+              color: #241a08;
+              padding: 0.7rem 1.3rem;
+              font-weight: 600;
+              box-shadow: 0 2px 10px rgba(12, 20, 32, 0.18);
+              transition: transform 0.2s ease, background 0.2s ease;
+            }
+            .bm-portal [data-gp-enter]:hover { background: #93702f; transform: translateY(-1px); }
+            .bm-portal [data-gp-enter]:focus-visible { outline: 2px solid #171b20; outline-offset: 3px; background: #faf7f0; color: #171b20; }
+          `}</style>
+        </>
       }
     >
       {/* Revealed once the scroll finishes entering the portal — real content
