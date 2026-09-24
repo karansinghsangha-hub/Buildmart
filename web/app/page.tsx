@@ -1,110 +1,129 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
+import { HomeHero } from "@/components/sections/home-hero";
 import { WorkforceCrowd } from "@/components/sections/workforce-crowd";
-
-const navLinks = [
-  { href: "#home", label: "Home" },
-  { href: "#workforce", label: "Our Workforce" },
-  { href: "#services", label: "Services" },
-  { href: "#contact", label: "Contact" },
-];
+import { ServicesGrid } from "@/components/services-grid";
+import { ProcessSteps } from "@/components/process-steps";
+import { GalleryGrid } from "@/components/gallery-grid";
+import { TestimonialsGrid } from "@/components/testimonials-grid";
 
 export default function Home() {
   return (
     <div className="flex min-h-full flex-col bg-background">
-      {/* ---------------------------------------------------------- header */}
-      <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur-md">
-        <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-6">
-          <Link href="#home" className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-gradient-to-br from-navy-900 to-navy-950 font-display text-lg font-bold text-brass-300">
-              B
-            </span>
-            <span className="flex flex-col leading-tight">
-              <span className="font-display text-lg font-semibold text-primary">
-                Build<span className="text-accent">Mart</span>
-              </span>
-              <span className="text-[0.62rem] font-medium uppercase tracking-[0.2em] text-muted-foreground">
-                Construction &amp; Design-Build
-              </span>
-            </span>
-          </Link>
-          <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="transition-colors hover:text-primary"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-          <a
-            href="#contact"
-            className="hidden rounded-[4px] bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground shadow-sm transition-transform hover:-translate-y-0.5 sm:inline-flex"
-          >
-            Request a Quote
-          </a>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main>
-        {/* -------------------------------------------------------- hero */}
-        <section
-          id="home"
-          className="relative overflow-hidden bg-gradient-to-b from-navy-950 via-navy-900 to-navy-900 px-6 py-24 text-[#faf7f0]"
-        >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse 900px 500px at 82% -10%, rgba(169,128,63,.14), transparent 60%)",
-            }}
-          />
-          <div className="relative mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-brass-300 before:h-px before:w-6 before:bg-brass-300 after:h-px after:w-6 after:bg-brass-300">
-              Est. 2019 · Built on Trust
-            </span>
-            <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-              We build spaces that <em className="text-brass-300 not-italic italic">outlast</em> the
-              blueprint.
-            </h1>
-            <p className="mx-auto mt-5 max-w-xl text-balance text-base text-[#faf7f0]/70">
-              A React + TypeScript rebuild of the BuildMart landing experience —
-              styled with Tailwind and shadcn/ui conventions, powered by the
-              Skiper39 GSAP crowd-canvas component below.
-            </p>
+        {/* Scroll-driven portal hero: scroll (or pick a letter) to zoom through
+            "BUILDMART" into the achievements + real navigation below. */}
+        <HomeHero />
+
+        {/* ----------------------------------------------------- services */}
+        <section className="bg-secondary/40 px-6 py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                  What We Do
+                </span>
+                <h2 className="mt-2 font-display text-3xl font-semibold text-primary sm:text-4xl">
+                  Construction services, engineered end to end.
+                </h2>
+              </div>
+              <Link
+                href="/services"
+                className="inline-flex items-center gap-2 rounded-[4px] border border-border px-5 py-2.5 text-sm font-semibold text-primary hover:border-primary"
+              >
+                View All Services <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+            <ServicesGrid />
           </div>
         </section>
 
-        {/* ------------------------------------------- workforce crowd -- */}
-        <div id="workforce">
-          <WorkforceCrowd />
-        </div>
+        {/* -------------------------------------------------------- process */}
+        <section className="px-6 py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-14">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                How We Work
+              </span>
+              <h2 className="mt-2 font-display text-3xl font-semibold text-primary sm:text-4xl">
+                A formal, four-stage process.
+              </h2>
+            </div>
+            <ProcessSteps />
+          </div>
+        </section>
 
-        {/* -------------------------------------------------- about strip */}
-        <section
-          id="services"
-          className="mx-auto max-w-6xl px-6 py-20 text-center"
-        >
-          <h2 className="font-display text-2xl font-semibold text-primary sm:text-3xl">
-            One crowd, every discipline.
-          </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
-            Residential, commercial and industrial builds — every project is
-            staffed by BuildMart&apos;s own engineers and site teams, the same
-            people animated above.
-          </p>
+        {/* ---------------------------------------------------- workforce -- */}
+        <WorkforceCrowd />
+
+        {/* -------------------------------------------------------- portfolio */}
+        <section className="bg-secondary/40 px-6 py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+                  Portfolio
+                </span>
+                <h2 className="mt-2 font-display text-3xl font-semibold text-primary sm:text-4xl">
+                  Selected work across India.
+                </h2>
+              </div>
+            </div>
+            <GalleryGrid />
+          </div>
+        </section>
+
+        {/* ----------------------------------------------------- testimonials */}
+        <section className="bg-navy-950 px-6 py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-12">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brass-300">
+                Client Word
+              </span>
+              <h2 className="mt-2 font-display text-3xl font-semibold text-[#faf7f0] sm:text-4xl">
+                Trusted by families and enterprises alike.
+              </h2>
+            </div>
+            <TestimonialsGrid />
+          </div>
+        </section>
+
+        {/* ------------------------------------------------------------- CTA */}
+        <section className="px-6 py-24">
+          <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl bg-gradient-to-br from-navy-950 to-navy-900 p-10 sm:p-14">
+            <div className="flex flex-wrap items-center justify-between gap-8">
+              <div>
+                <h3 className="mb-2 font-display text-2xl font-semibold text-[#faf7f0] sm:text-3xl">
+                  Ready to break ground?
+                </h3>
+                <p className="text-[#faf7f0]/70">
+                  Book a free, no-obligation site consultation with our engineering team this week.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/contact"
+                  className="rounded-[4px] bg-[#a9803f] px-6 py-3 text-sm font-semibold text-[#241a08] transition-transform hover:-translate-y-0.5"
+                >
+                  Book Consultation
+                </Link>
+                <Link
+                  href="/signin"
+                  className="rounded-[4px] border border-white/20 px-6 py-3 text-sm font-semibold text-[#faf7f0] hover:border-brass-300 hover:text-brass-300"
+                >
+                  Create Account
+                </Link>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 
-      {/* ---------------------------------------------------------- footer */}
-      <footer
-        id="contact"
-        className="mt-auto border-t border-border bg-navy-950 px-6 py-10 text-center text-sm text-[#faf7f0]/60"
-      >
-        © 2026 BuildMart Constructions Pvt. Ltd. All rights reserved.
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
