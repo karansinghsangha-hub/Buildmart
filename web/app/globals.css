@@ -1,0 +1,117 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.5rem;
+
+  /* BuildMart brand palette — deep navy + brass, warm paper neutrals */
+  --background: #faf7f0;
+  --foreground: #171b20;
+
+  --card: #ffffff;
+  --card-foreground: #171b20;
+
+  --popover: #ffffff;
+  --popover-foreground: #171b20;
+
+  --primary: #101a29;
+  --primary-foreground: #faf7f0;
+
+  --secondary: #f1ebdd;
+  --secondary-foreground: #171b20;
+
+  --muted: #f1ebdd;
+  --muted-foreground: #4d5560;
+
+  --accent: #a9803f;
+  --accent-foreground: #241a08;
+
+  --destructive: #a3392b;
+  --destructive-foreground: #faf7f0;
+
+  --border: #e2d9c6;
+  --input: #e2d9c6;
+  --ring: #a9803f;
+
+  --brass: #a9803f;
+  --brass-300: #d8b978;
+  --navy-950: #0c1420;
+  --navy-900: #101a29;
+}
+
+.dark {
+  --background: #0c1420;
+  --foreground: #faf7f0;
+
+  --card: #101a29;
+  --card-foreground: #faf7f0;
+
+  --popover: #101a29;
+  --popover-foreground: #faf7f0;
+
+  --primary: #d8b978;
+  --primary-foreground: #101a29;
+
+  --secondary: #16243a;
+  --secondary-foreground: #faf7f0;
+
+  --muted: #16243a;
+  --muted-foreground: #9aa3b1;
+
+  --accent: #d8b978;
+  --accent-foreground: #101a29;
+
+  --destructive: #c2554a;
+  --destructive-foreground: #faf7f0;
+
+  --border: rgba(250, 247, 240, 0.12);
+  --input: rgba(250, 247, 240, 0.14);
+  --ring: #d8b978;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brass: var(--brass);
+  --color-brass-300: var(--brass-300);
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+}
