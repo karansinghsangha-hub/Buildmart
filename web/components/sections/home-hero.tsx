@@ -1,8 +1,20 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, Award, Landmark, HandCoins } from "lucide-react";
 import GlyphPortal, { type GlyphPortalStyle } from "@/components/ui/glyph-portal";
+import { fraunces } from "@/lib/fonts";
+
+// GlyphPortal checks whether its requested font is already downloaded the
+// instant it mounts — if not, it permanently disables the scroll animation
+// for that page view (its own comment: "A pending requested face may also
+// hold WebKit's render loop. Keep that mount static."). On a fresh visit,
+// Fraunces is very often still downloading at that exact moment, so the
+// component must not mount until the font is confirmed ready — the same
+// gating the reference demo does with its own FontFace() + timeout.
+const FRAUNCES_BOLD = `700 100px ${fraunces.style.fontFamily}`;
+const SAFE_FALLBACK_FONT = '"Arial Black", Arial, sans-serif';
 
 // BuildMart's own palette for the portal, in place of the component's default
 // green: the field you zoom into is the same deep navy used for the hero and
@@ -31,13 +43,49 @@ const navyField = (
 );
 
 export function HomeHero() {
+  // null = still waiting; otherwise the confirmed-available family to hand
+  // to GlyphPortal — Fraunces on success, a safe system stack on timeout,
+  // so a slow/blocked font degrades gracefully instead of freezing the
+  // animation (mirrors the reference demo's finish(family)/finish("Arial…")).
+  const [portalFont, setPortalFont] = useState<string | null>(null);
+
+  useEffect(() => {
+    let settled = false;
+    const finish = (family: string) => {
+      if (!settled) {
+        settled = true;
+        setPortalFont(family);
+      }
+    };
+    const timeout = window.setTimeout(() => finish(SAFE_FALLBACK_FONT), 1600);
+    document.fonts.load(FRAUNCES_BOLD).then(
+      () => finish(fraunces.style.fontFamily),
+      () => finish(SAFE_FALLBACK_FONT),
+    );
+    return () => {
+      settled = true;
+      clearTimeout(timeout);
+    };
+  }, []);
+
+  if (!portalFont) {
+    return (
+      <div
+        role="status"
+        className="grid h-svh place-items-center bg-navy-950 text-sm text-[#faf7f0]/50"
+      >
+        Loading…
+      </div>
+    );
+  }
+
   return (
     <GlyphPortal
       word="BUILDMART"
       interactive
       annotations={false}
       scrollLength={2.2}
-      fontFamily='var(--font-fraunces), Georgia, serif'
+      fontFamily={portalFont}
       fontWeight={700}
       enterLabel="Enter BuildMart"
       style={portalStyle}
