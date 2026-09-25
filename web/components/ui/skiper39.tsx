@@ -7,9 +7,19 @@ interface CrowdCanvasProps {
   src: string;
   rows?: number;
   cols?: number;
+  /**
+   * BuildMart addition (not in the original component): caps how many
+   * peeps populate the stage at once, independent of rows/cols. rows/cols
+   * must match the source sprite sheet's actual grid to slice it cleanly —
+   * shrinking them to "have fewer people" re-slices the same image into
+   * the wrong-sized rectangles and corrupts the artwork. This prop lets a
+   * narrower viewport show a sparser crowd from the same full sprite sheet
+   * instead. Defaults to rows*cols, i.e. the original, uncapped behavior.
+   */
+  maxConcurrent?: number;
 }
 
-const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
+const CrowdCanvas = ({ src, rows = 15, cols = 7, maxConcurrent }: CrowdCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -23,6 +33,7 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
       src,
       rows,
       cols,
+      maxConcurrent,
     };
 
     // UTILS
@@ -195,7 +206,10 @@ const CrowdCanvas = ({ src, rows = 15, cols = 7 }: CrowdCanvasProps) => {
     };
 
     const initCrowd = () => {
-      while (availablePeeps.length) {
+      // BuildMart addition: cap the initial population at maxConcurrent
+      // (default: uncapped, i.e. every peep — the original behavior).
+      const cap = config.maxConcurrent ?? Infinity;
+      while (availablePeeps.length && crowd.length < cap) {
         addPeepToCrowd().walk.progress(Math.random());
       }
     };

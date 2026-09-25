@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { HomeHero } from "@/components/sections/home-hero";
+import { Achievements } from "@/components/sections/achievements";
 import { WorkforceCrowd } from "@/components/sections/workforce-crowd";
 import { ServicesGrid } from "@/components/services-grid";
 import { ProcessSteps } from "@/components/process-steps";
@@ -15,9 +16,10 @@ export default function Home() {
       <SiteHeader />
 
       <main>
-        {/* Scroll-driven portal hero: scroll (or pick a letter) to zoom through
-            "BUILDMART" into the achievements + real navigation below. */}
+        {/* Scroll-driven zoom hero: scroll to zoom through "BUILDMART" into
+            the navy achievements section right below it. */}
         <HomeHero />
+        <Achievements />
 
         {/* ----------------------------------------------------- services */}
         <section className="bg-secondary/40 px-6 py-24">
