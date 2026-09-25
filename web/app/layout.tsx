@@ -3,9 +3,9 @@ import { fraunces, inter } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BuildMart — Construction & Design-Build",
+  title: "BuildMart — Construction Procurement Marketplace",
   description:
-    "BuildMart is a premium construction and design-build company delivering residential, commercial and industrial projects across India.",
+    "BuildMart connects contractors with verified local material suppliers — compare delivered cost, run reverse-bid procurement, and track orders in one place.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -8,11 +8,7 @@ export const metadata: Metadata = {
     "Sign in to your BuildMart client account to track project progress, or create a new account to get started.",
 };
 
-const authStats = [
-  { value: "187+", label: "Projects Delivered" },
-  { value: "42+", label: "Cities Served" },
-  { value: "98%", label: "On-time Rate" },
-];
+const authPoints = ["Local supplier matching", "Reverse-bid procurement", "Delivered-cost comparison"];
 
 export default function SignInPage() {
   return (
@@ -37,7 +33,7 @@ export default function SignInPage() {
               Build<span className="text-brass-300">Mart</span>
             </span>
             <span className="block text-[0.62rem] uppercase tracking-[0.2em] text-[#faf7f0]/55">
-              Construction &amp; Design-Build
+              Procurement Marketplace
             </span>
           </span>
         </Link>
@@ -50,12 +46,12 @@ export default function SignInPage() {
           <div className="mt-5 text-sm text-brass-300">— BuildMart Founding Team, 2025</div>
         </div>
 
-        <div className="relative z-10 flex gap-9">
-          {authStats.map((s) => (
-            <div key={s.label}>
-              <strong className="block font-display text-2xl text-brass-300">{s.value}</strong>
-              <span className="text-xs text-[#faf7f0]/55">{s.label}</span>
-            </div>
+        <div className="relative z-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#faf7f0]/70">
+          {authPoints.map((point) => (
+            <span key={point} className="flex items-center gap-2">
+              <span className="h-1 w-1 rounded-full bg-brass-300" />
+              {point}
+            </span>
           ))}
         </div>
       </div>

@@ -1,14 +1,16 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Users, HardHat } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { HomeHero } from "@/components/sections/home-hero";
-import { Achievements } from "@/components/sections/achievements";
-import { WorkforceCrowd } from "@/components/sections/workforce-crowd";
-import { ServicesGrid } from "@/components/services-grid";
-import { ProcessSteps } from "@/components/process-steps";
-import { GalleryGrid } from "@/components/gallery-grid";
-import { TestimonialsGrid } from "@/components/testimonials-grid";
+import { Solution } from "@/components/sections/solution";
+import { SearchBar } from "@/components/sections/search-bar";
+import { MarketplacePreview } from "@/components/sections/marketplace-preview";
+import { CostIntelligence } from "@/components/sections/cost-intelligence";
+import { ProjectDashboardPreview } from "@/components/sections/project-dashboard-preview";
+import { HowItWorks } from "@/components/how-it-works";
+import { problems, contractorBenefits, supplierBenefits, trustPoints } from "@/lib/site-data";
+import { CATEGORIES } from "@/lib/categories";
 
 export default function Home() {
   return (
@@ -16,108 +18,200 @@ export default function Home() {
       <SiteHeader />
 
       <main>
-        {/* Scroll-driven zoom hero: scroll to zoom through "BUILDMART" into
-            the navy achievements section right below it. */}
+        {/* Scroll-driven zoom hero, flows straight into the navy Solution section */}
         <HomeHero />
-        <Achievements />
+        <Solution />
 
-        {/* ----------------------------------------------------- services */}
-        <section className="bg-secondary/40 px-6 py-24">
+        {/* ------------------------------------------------------- search */}
+        <section className="px-6 py-16">
+          <SearchBar />
+        </section>
+
+        {/* ------------------------------------------------------- problem */}
+        <section className="bg-secondary/40 px-6 py-20">
           <div className="mx-auto max-w-6xl">
-            <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-              <div>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                  What We Do
-                </span>
-                <h2 className="mt-2 font-display text-3xl font-semibold text-primary sm:text-4xl">
-                  Construction services, engineered end to end.
-                </h2>
-              </div>
-              <Link
-                href="/services"
-                className="inline-flex items-center gap-2 rounded-[4px] border border-border px-5 py-2.5 text-sm font-semibold text-primary hover:border-primary"
-              >
-                View All Services <ArrowRight className="h-4 w-4" />
+            <div className="mb-12 text-center">
+              <h2 className="font-display text-2xl font-semibold text-primary sm:text-3xl">
+                Construction procurement shouldn&apos;t be this fragmented.
+              </h2>
+            </div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {problems.map((p) => (
+                <div key={p.title} className="rounded-2xl border border-border bg-card p-6">
+                  <h3 className="mb-2 font-semibold text-primary">{p.title}</h3>
+                  <p className="text-sm text-muted-foreground">{p.copy}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* --------------------------------------------------- how it works */}
+        <section className="px-6 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-14 text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">How It Works</span>
+              <h2 className="mt-2 font-display text-2xl font-semibold text-primary sm:text-3xl">
+                From project to purchase order.
+              </h2>
+            </div>
+            <HowItWorks />
+          </div>
+        </section>
+
+        {/* ----------------------------------------------- marketplace preview */}
+        <section className="bg-secondary/40 px-6 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-12 text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Marketplace</span>
+              <h2 className="mt-2 font-display text-2xl font-semibold text-primary sm:text-3xl">
+                Example listings on BuildMart.
+              </h2>
+            </div>
+            <MarketplacePreview />
+          </div>
+        </section>
+
+        {/* --------------------------------------------------- reverse bidding */}
+        <section className="px-6 py-20">
+          <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl bg-gradient-to-br from-navy-950 to-navy-900 p-10 text-center text-[#faf7f0] sm:p-14">
+            <h2 className="mb-3 font-display text-2xl font-semibold sm:text-3xl">
+              Let suppliers compete for your order.
+            </h2>
+            <p className="mx-auto mb-7 max-w-xl text-[#faf7f0]/70">
+              Post your requirement once. Receive multiple competitive quotes instead of calling suppliers one by
+              one.
+            </p>
+            <Link
+              href="/signin"
+              className="inline-flex items-center gap-2 rounded-[4px] bg-[#a9803f] px-7 py-3 text-sm font-semibold text-[#241a08]"
+            >
+              Create Procurement Request
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+
+        {/* -------------------------------------------------- cost intelligence */}
+        <section className="bg-secondary/40 px-6 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-12 text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Delivered Cost</span>
+              <h2 className="mt-2 font-display text-2xl font-semibold text-primary sm:text-3xl">
+                Don&apos;t compare prices. Compare delivered costs.
+              </h2>
+            </div>
+            <CostIntelligence />
+          </div>
+        </section>
+
+        {/* ------------------------------------------------ dashboard preview */}
+        <section className="px-6 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-12 text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Procurement Dashboard</span>
+              <h2 className="mt-2 font-display text-2xl font-semibold text-primary sm:text-3xl">
+                One record for every project.
+              </h2>
+            </div>
+            <ProjectDashboardPreview />
+          </div>
+        </section>
+
+        {/* -------------------------------------------------------- categories */}
+        <section className="bg-secondary/40 px-6 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <h2 className="font-display text-2xl font-semibold text-primary sm:text-3xl">
+                Popular construction categories.
+              </h2>
+            </div>
+            <div className="flex flex-wrap justify-center gap-3">
+              {CATEGORIES.map((c) => (
+                <Link
+                  key={c}
+                  href="/marketplace"
+                  className="rounded-full border border-border bg-card px-5 py-2.5 text-sm font-medium text-primary hover:border-accent"
+                >
+                  {c}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* --------------------------------------------- contractor / supplier */}
+        <section className="px-6 py-20">
+          <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-2">
+            <div className="rounded-2xl border border-border bg-card p-8">
+              <HardHat className="mb-4 h-8 w-8 text-accent" />
+              <h3 className="mb-2 font-display text-xl font-semibold text-primary">Built for people who build.</h3>
+              <ul className="mb-6 space-y-2 text-sm text-muted-foreground">
+                {contractorBenefits.slice(0, 4).map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+              <Link href="/for-contractors" className="inline-flex items-center gap-2 text-sm font-semibold text-accent">
+                Explore for Contractors
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
-            <ServicesGrid />
-          </div>
-        </section>
-
-        {/* -------------------------------------------------------- process */}
-        <section className="px-6 py-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="mb-14">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                How We Work
-              </span>
-              <h2 className="mt-2 font-display text-3xl font-semibold text-primary sm:text-4xl">
-                A formal, four-stage process.
-              </h2>
+            <div className="rounded-2xl border border-border bg-card p-8">
+              <Users className="mb-4 h-8 w-8 text-accent" />
+              <h3 className="mb-2 font-display text-xl font-semibold text-primary">
+                Turn your inventory into new business.
+              </h3>
+              <ul className="mb-6 space-y-2 text-sm text-muted-foreground">
+                {supplierBenefits.slice(0, 4).map((b) => (
+                  <li key={b}>· {b}</li>
+                ))}
+              </ul>
+              <Link href="/for-suppliers" className="inline-flex items-center gap-2 text-sm font-semibold text-accent">
+                Explore for Suppliers
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
-            <ProcessSteps />
           </div>
         </section>
 
-        {/* ---------------------------------------------------- workforce -- */}
-        <WorkforceCrowd />
-
-        {/* -------------------------------------------------------- portfolio */}
-        <section className="bg-secondary/40 px-6 py-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-              <div>
-                <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
-                  Portfolio
+        {/* -------------------------------------------------------------- trust */}
+        <section className="bg-secondary/40 px-6 py-20">
+          <div className="mx-auto max-w-4xl text-center">
+            <h2 className="mb-8 font-display text-2xl font-semibold text-primary sm:text-3xl">
+              Built around transparent transactions.
+            </h2>
+            <div className="flex flex-wrap justify-center gap-3">
+              {trustPoints.map((t) => (
+                <span key={t} className="rounded-full border border-border bg-card px-4 py-2 text-sm text-primary">
+                  {t}
                 </span>
-                <h2 className="mt-2 font-display text-3xl font-semibold text-primary sm:text-4xl">
-                  Selected work across India.
-                </h2>
-              </div>
+              ))}
             </div>
-            <GalleryGrid />
-          </div>
-        </section>
-
-        {/* ----------------------------------------------------- testimonials */}
-        <section className="bg-navy-950 px-6 py-24">
-          <div className="mx-auto max-w-6xl">
-            <div className="mb-12">
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brass-300">
-                Client Word
-              </span>
-              <h2 className="mt-2 font-display text-3xl font-semibold text-[#faf7f0] sm:text-4xl">
-                Trusted by families and enterprises alike.
-              </h2>
-            </div>
-            <TestimonialsGrid />
           </div>
         </section>
 
         {/* ------------------------------------------------------------- CTA */}
-        <section className="px-6 py-24">
+        <section className="px-6 py-20">
           <div className="mx-auto max-w-6xl overflow-hidden rounded-3xl bg-gradient-to-br from-navy-950 to-navy-900 p-10 sm:p-14">
             <div className="flex flex-wrap items-center justify-between gap-8">
               <div>
                 <h3 className="mb-2 font-display text-2xl font-semibold text-[#faf7f0] sm:text-3xl">
-                  Ready to break ground?
+                  Ready to procure smarter?
                 </h3>
-                <p className="text-[#faf7f0]/70">
-                  Book a free, no-obligation site consultation with our engineering team this week.
-                </p>
+                <p className="text-[#faf7f0]/70">Post your first requirement and discover suppliers around your project.</p>
               </div>
               <div className="flex flex-wrap gap-3">
                 <Link
-                  href="/contact"
+                  href="/signin"
                   className="rounded-[4px] bg-[#a9803f] px-6 py-3 text-sm font-semibold text-[#241a08] transition-transform hover:-translate-y-0.5"
                 >
-                  Book Consultation
+                  Start Procuring
                 </Link>
                 <Link
-                  href="/signin"
+                  href="/for-suppliers"
                   className="rounded-[4px] border border-white/20 px-6 py-3 text-sm font-semibold text-[#faf7f0] hover:border-brass-300 hover:text-brass-300"
                 >
-                  Create Account
+                  Join as Supplier
                 </Link>
               </div>
             </div>

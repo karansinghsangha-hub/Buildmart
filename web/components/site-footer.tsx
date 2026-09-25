@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 
 // lucide-react dropped brand/social marks (trademark policy), so the three
 // socials below use minimal inline glyphs instead of a Lucide import.
@@ -33,9 +33,8 @@ export function SiteFooter() {
               </span>
             </Link>
             <p className="mt-4 max-w-xs text-sm">
-              Design-build construction partner delivering formal, on-time projects
-              across India since 2019. Youth Ideathon 2025 Top-100 finalist,
-              showcased at IIT Delhi.
+              A construction procurement marketplace connecting contractors with verified local suppliers. Top 100
+              at Youth Ideathon 2025, showcased at IIT Delhi.
             </p>
             <div className="mt-5 flex gap-3">
               {socialIcons.map((icon) => (
@@ -54,38 +53,28 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h5 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#faf7f0]">
-              Company
-            </h5>
+            <h5 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#faf7f0]">Company</h5>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/about" className="hover:text-brass-300">About Us</Link></li>
-              <li><Link href="/about#timeline" className="hover:text-brass-300">Our Journey</Link></li>
-              <li><Link href="/about#team" className="hover:text-brass-300">Leadership Team</Link></li>
-              <li><Link href="/contact" className="hover:text-brass-300">Careers</Link></li>
+              <li><Link href="/about" className="hover:text-brass-300">About</Link></li>
+              <li><Link href="/services" className="hover:text-brass-300">Services</Link></li>
+              <li><Link href="/estimator" className="hover:text-brass-300">Cost Estimator</Link></li>
+              <li><Link href="/contact" className="hover:text-brass-300">Contact</Link></li>
             </ul>
           </div>
 
           <div>
-            <h5 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#faf7f0]">
-              Services
-            </h5>
+            <h5 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#faf7f0]">Marketplace</h5>
             <ul className="space-y-3 text-sm">
-              <li><Link href="/services" className="hover:text-brass-300">Residential</Link></li>
-              <li><Link href="/services" className="hover:text-brass-300">Commercial</Link></li>
-              <li><Link href="/services" className="hover:text-brass-300">Industrial</Link></li>
-              <li><Link href="/services#estimator" className="hover:text-brass-300">Cost Estimator</Link></li>
+              <li><Link href="/marketplace" className="hover:text-brass-300">Browse Suppliers</Link></li>
+              <li><Link href="/for-contractors" className="hover:text-brass-300">For Contractors</Link></li>
+              <li><Link href="/for-suppliers" className="hover:text-brass-300">For Suppliers</Link></li>
+              <li><Link href="/signin" className="hover:text-brass-300">Sign In</Link></li>
             </ul>
           </div>
 
           <div>
-            <h5 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#faf7f0]">
-              Head Office
-            </h5>
+            <h5 className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-[#faf7f0]">Contact</h5>
             <div className="space-y-3 text-sm">
-              <div className="flex gap-2.5">
-                <MapPin className="mt-0.5 h-4 w-4 flex-none text-brass-300" />
-                <span>4th Floor, Vertex Tower, Sector 44, Gurugram, Haryana 122003</span>
-              </div>
               <div className="flex gap-2.5">
                 <Phone className="mt-0.5 h-4 w-4 flex-none text-brass-300" />
                 <span>+91 98100 45672</span>
@@ -94,12 +83,13 @@ export function SiteFooter() {
                 <Mail className="mt-0.5 h-4 w-4 flex-none text-brass-300" />
                 <span>hello@buildmart.co.in</span>
               </div>
+              <div className="text-[#faf7f0]/50">Gurugram, India</div>
             </div>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 py-6 text-sm">
-          <span>© 2026 BuildMart Constructions Pvt. Ltd. All rights reserved.</span>
+          <span>© 2026 BuildMart. All rights reserved.</span>
           <div className="flex gap-6">
             <a href="#" className="hover:text-brass-300">Privacy Policy</a>
             <a href="#" className="hover:text-brass-300">Terms of Service</a>

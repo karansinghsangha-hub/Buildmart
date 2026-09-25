@@ -42,13 +42,13 @@ function OpeningCopy({ style }: { style?: React.CSSProperties }) {
       style={style}
     >
       <span className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#a9803f] before:h-px before:w-6 before:bg-[#a9803f] after:h-px after:w-6 after:bg-[#a9803f]">
-        Est. 2019 · Built on Trust
+        Construction Procurement Marketplace
       </span>
       <h1 className="max-w-2xl text-balance font-display text-2xl font-semibold tracking-tight text-[#171b20] sm:text-4xl">
-        We build spaces that outlast the blueprint.
+        Build smarter. Source locally. Build for less.
       </h1>
       <p className="mx-auto hidden max-w-md text-sm text-[#171b20]/65 sm:block">
-        Scroll down to step inside BuildMart.
+        Scroll down to see how BuildMart works.
       </p>
     </div>
   );

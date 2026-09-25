@@ -12,6 +12,24 @@ const typeMultiplier: Record<ProjectType, number> = { residential: 1, commercial
 
 const fmtINR = (n: number) => "₹" + Math.round(n).toLocaleString("en-IN");
 
+// Typical share of a construction budget spent on each material/work
+// category — used only to break the estimate into an indicative
+// procurement plan, not a precise quantity takeoff.
+const BREAKDOWN: { category: string; pct: number }[] = [
+  { category: "Cement", pct: 0.09 },
+  { category: "Steel", pct: 0.17 },
+  { category: "Sand & Aggregates", pct: 0.08 },
+  { category: "Bricks & Blocks", pct: 0.09 },
+  { category: "Ready-Mix Concrete", pct: 0.05 },
+  { category: "Electrical", pct: 0.08 },
+  { category: "Plumbing", pct: 0.06 },
+  { category: "Tiles", pct: 0.09 },
+  { category: "Paints", pct: 0.04 },
+  { category: "Hardware & Windows/Doors", pct: 0.07 },
+  { category: "Labour", pct: 0.13 },
+  { category: "Other", pct: 0.05 },
+];
+
 export function Estimator() {
   const [area, setArea] = useState(1800);
   const [floors, setFloors] = useState(2);
@@ -100,11 +118,26 @@ export function Estimator() {
         </ul>
 
         <Link
-          href="/contact"
+          href="/marketplace"
           className="rounded-[4px] bg-[#a9803f] px-6 py-3 text-center text-sm font-semibold text-[#241a08] transition-transform hover:-translate-y-0.5"
         >
-          Get a Formal Quotation
+          Source These Materials
         </Link>
+      </div>
+
+      <div className="lg:col-span-2">
+        <h3 className="mb-1 font-display text-lg font-semibold text-primary">Estimated Procurement Breakdown</h3>
+        <p className="mb-5 text-sm text-muted-foreground">
+          An indicative split of the estimate above by material and work category — not a quantity takeoff.
+        </p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {BREAKDOWN.map((b) => (
+            <div key={b.category} className="flex items-center justify-between rounded-lg border border-border bg-background px-4 py-2.5 text-sm">
+              <span className="text-muted-foreground">{b.category}</span>
+              <span className="font-semibold text-primary">{fmtINR(total * b.pct)}</span>
+            </div>
+          ))}
+        </div>
       </div>
 
       <style>{`

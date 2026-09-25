@@ -28,19 +28,19 @@ export function ContactForm() {
       <FieldInput id="emailAddr" label="Email Address" icon={<Mail className="h-4 w-4" />} placeholder="you@email.com" type="email" required />
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="projectType" className="mb-2 block text-sm font-semibold text-primary">
-            Project Type
+          <label htmlFor="inquiryType" className="mb-2 block text-sm font-semibold text-primary">
+            I am a
           </label>
           <div className="relative">
             <Building2 className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <select
-              id="projectType"
+              id="inquiryType"
               className="w-full rounded-[4px] border border-border bg-card py-3 pl-10 pr-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
             >
-              <option>Residential</option>
-              <option>Commercial</option>
-              <option>Industrial</option>
-              <option>Renovation</option>
+              <option>Contractor</option>
+              <option>Supplier</option>
+              <option>Partner / Investor</option>
+              <option>Other</option>
             </select>
           </div>
         </div>
@@ -53,7 +53,7 @@ export function ContactForm() {
         <textarea
           id="msgBox"
           rows={4}
-          placeholder="Tell us about your plot size, timeline and budget range…"
+          placeholder="Tell us what you need — materials, categories, or how we can help…"
           className="w-full resize-y rounded-[4px] border border-border bg-card p-3 text-sm focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
         />
       </div>
