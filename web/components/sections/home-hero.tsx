@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { useMediaQuery } from "@/lib/use-media-query";
 
 /**
  * HomeHero — a scroll-driven zoom into "BUILDMART".
@@ -16,17 +15,17 @@ import { useMediaQuery } from "@/lib/use-media-query";
  * no font-load race, no hidden disable switch, no letter picker, nothing
  * to click that skips it.
  *
- * prefers-reduced-motion renders a completely separate, static component
- * (StaticHero below) rather than sharing state with the animated one. An
- * earlier version tried to reuse one code path for both by forcing the
- * scroll "progress" value to 1 for reduced-motion users — intending to
- * show the settled end frame, but 1 is this component's *fully zoomed in*
- * state, where the word has faded out and only the navy field is left.
- * That showed a blank navy panel with no word, permanently, for anyone
- * with reduced motion on (a common Windows setting, not a rare one) —
- * indistinguishable from the whole hero being broken. Splitting the two
- * modes into separate components means neither can leak the other's
- * numeric state into the wrong visual frame again.
+ * This always renders the animated, scroll-driven version — including for
+ * prefers-reduced-motion. That's a deliberate call, not an oversight: an
+ * earlier version special-cased reduced-motion into a separate static
+ * component, which is the generally-recommended thing to do, but the
+ * person this site is for asked twice for the animation to play
+ * regardless of that OS setting, so it does. If that's ever worth
+ * revisiting, gate it on prefers-reduced-motion (see git history for the
+ * StaticHero component this replaced) rather than reintroducing the
+ * shared-state bug that motivated splitting it out in the first place —
+ * whichever component reduced-motion renders needs to not depend on the
+ * animated one's numeric "progress" state at all.
  */
 
 const PIN_HEIGHTS = 2.2; // scroll travel, in viewport heights
@@ -65,16 +64,6 @@ function TheWord({ style }: { style?: React.CSSProperties }) {
         BUILDMART
       </span>
     </div>
-  );
-}
-
-/** No scroll-jacking, no transform/opacity animation — a plain static hero. */
-function StaticHero() {
-  return (
-    <section className="relative flex h-svh flex-col items-center justify-center overflow-hidden bg-[#faf7f0] px-4">
-      <OpeningCopy />
-      <TheWord />
-    </section>
   );
 }
 
@@ -161,8 +150,7 @@ function AnimatedHero() {
 }
 
 export function HomeHero() {
-  const reducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
-  return reducedMotion ? <StaticHero /> : <AnimatedHero />;
+  return <AnimatedHero />;
 }
 
 export default HomeHero;
