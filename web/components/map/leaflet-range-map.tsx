@@ -80,13 +80,20 @@ export default function LeafletRangeMap({
       center={center}
       zoom={zoom}
       scrollWheelZoom
-      className="h-full w-full"
+      className="h-full w-full bm-map-dark"
       style={{ background: "#0c1420" }}
     >
       <FlyTo center={center} zoom={zoom} />
+      {/*
+        Plain OpenStreetMap raster tiles — no API key, ever (CARTO's basemaps
+        started requiring one and broke the previous dark tile layer). The
+        dark look comes from a CSS filter on .bm-map-dark .leaflet-tile-pane
+        in globals.css (invert + hue-rotate), a standard trick for a themed
+        map without a paid/keyed tile provider.
+      */}
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
       {selected && (

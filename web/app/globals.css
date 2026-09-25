@@ -115,3 +115,25 @@
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   }
 }
+
+/* Range Finder map (components/map/leaflet-range-map.tsx) — darkens plain
+   OpenStreetMap raster tiles to match the site's navy theme, since the
+   previously-used CARTO dark tile provider now requires an API key. */
+.bm-map-dark .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9) saturate(0.6);
+}
+.bm-map-dark .leaflet-control-attribution {
+  background: rgba(12, 20, 32, 0.75) !important;
+  color: rgba(250, 247, 240, 0.65) !important;
+}
+.bm-map-dark .leaflet-control-attribution a {
+  color: rgba(216, 185, 120, 0.9) !important;
+}
+.bm-map-dark .leaflet-control-zoom a {
+  background: #101a29 !important;
+  color: #faf7f0 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.bm-map-dark .leaflet-control-zoom a:hover {
+  background: #0c1420 !important;
+}
