@@ -9,6 +9,7 @@ import { MarketplacePreview } from "@/components/sections/marketplace-preview";
 import { CostIntelligence } from "@/components/sections/cost-intelligence";
 import { ProjectDashboardPreview } from "@/components/sections/project-dashboard-preview";
 import { HowItWorks } from "@/components/how-it-works";
+import { RangeFinder } from "@/components/sections/range-finder";
 import { problems, contractorBenefits, supplierBenefits, trustPoints } from "@/lib/site-data";
 import { CATEGORIES } from "@/lib/categories";
 
@@ -56,6 +57,23 @@ export default function Home() {
               </h2>
             </div>
             <HowItWorks />
+          </div>
+        </section>
+
+        {/* -------------------------------------------------- range finder / map */}
+        <section id="find-near-you" className="px-6 py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-12 text-center">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Across India</span>
+              <h2 className="mt-2 font-display text-2xl font-semibold text-primary sm:text-3xl">
+                Find suppliers and contractors near you.
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+                Set a city and a range — BuildMart plots every supplier and contractor on the platform
+                within it, live.
+              </p>
+            </div>
+            <RangeFinder />
           </div>
         </section>
 

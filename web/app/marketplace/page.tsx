@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Search, MapPin, ShieldCheck, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { RangeFinder } from "@/components/sections/range-finder";
 import { useStore } from "@/lib/store";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { CATEGORIES } from "@/lib/categories";
@@ -69,6 +70,9 @@ function MarketplaceContent() {
 
         <section className="px-6 py-14">
           <div className="mx-auto max-w-6xl">
+            <div className="mb-14">
+              <RangeFinder />
+            </div>
             <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <div className="relative flex-1">
                 <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
