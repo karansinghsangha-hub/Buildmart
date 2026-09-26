@@ -10,6 +10,7 @@ import { CostIntelligence } from "@/components/sections/cost-intelligence";
 import { ProjectDashboardPreview } from "@/components/sections/project-dashboard-preview";
 import { HowItWorks } from "@/components/how-it-works";
 import { RangeFinder } from "@/components/sections/range-finder";
+import { SiteCrowd } from "@/components/sections/site-crowd";
 import { problems, contractorBenefits, supplierBenefits, trustPoints } from "@/lib/site-data";
 import { CATEGORIES } from "@/lib/categories";
 
@@ -207,6 +208,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* --------------------------------------------------------- site crowd */}
+        <SiteCrowd />
 
         {/* ------------------------------------------------------------- CTA */}
         <section className="px-6 py-20">

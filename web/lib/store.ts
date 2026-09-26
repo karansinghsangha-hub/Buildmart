@@ -306,6 +306,29 @@ export function submitQuote(input: {
   return quote;
 }
 
+/** Revises a supplier's own still-live bid (request still "open"). */
+export function reviseQuote(
+  quoteId: string,
+  input: { unitPrice: number; freight: number; etaDays: number; paymentTerms: string; stockNote: string },
+): void {
+  mutate((d) => {
+    const quote = d.quotes.find((q) => q.id === quoteId);
+    const request = quote && d.requests.find((r) => r.id === quote.requestId);
+    if (!quote || !request || request.status !== "open" || quote.supplierId !== d.currentUserId) return;
+    Object.assign(quote, input, { updatedAt: new Date().toISOString() });
+  });
+}
+
+/** Withdraws a supplier's own still-live bid from an open request. */
+export function withdrawQuote(quoteId: string): void {
+  mutate((d) => {
+    const quote = d.quotes.find((q) => q.id === quoteId);
+    const request = quote && d.requests.find((r) => r.id === quote.requestId);
+    if (!quote || !request || request.status !== "open" || quote.supplierId !== d.currentUserId) return;
+    d.quotes = d.quotes.filter((q) => q.id !== quoteId);
+  });
+}
+
 export function acceptQuote(quoteId: string): Order {
   const d = load();
   const quote = d.quotes.find((q) => q.id === quoteId)!;
@@ -354,6 +377,7 @@ export function addProduct(input: {
   unit: string;
   pricePerUnit: number;
   stockQty: number | null;
+  description?: string;
 }): Product {
   const d = load();
   const product: Product = { id: id("prod"), supplierId: d.currentUserId!, ...input };
@@ -365,10 +389,45 @@ export function addProduct(input: {
   return product;
 }
 
+export function updateProduct(
+  productId: string,
+  input: { name: string; pricePerUnit: number; stockQty: number | null; description?: string },
+): void {
+  mutate((d) => {
+    const product = d.products.find((p) => p.id === productId && p.supplierId === d.currentUserId);
+    if (product) Object.assign(product, input);
+  });
+}
+
+export function deleteProduct(productId: string): void {
+  mutate((d) => {
+    d.products = d.products.filter((p) => !(p.id === productId && p.supplierId === d.currentUserId));
+  });
+}
+
+export function toggleProductFeatured(productId: string): void {
+  mutate((d) => {
+    const product = d.products.find((p) => p.id === productId && p.supplierId === d.currentUserId);
+    if (product) product.featured = !product.featured;
+  });
+}
+
 export function setSupplierRadius(km: number) {
   mutate((d) => {
     const sp = d.supplierProfiles.find((s) => s.userId === d.currentUserId);
     if (sp) sp.deliveryRadiusKm = km;
+  });
+}
+
+export function updateSupplierProfile(input: {
+  categories: string[];
+  paymentTerms: string[];
+  minOrderNote?: string;
+  description?: string;
+}): void {
+  mutate((d) => {
+    const sp = d.supplierProfiles.find((s) => s.userId === d.currentUserId);
+    if (sp) Object.assign(sp, input);
   });
 }
 

@@ -21,6 +21,7 @@ const navByRole: Record<Role | "admin", { href: string; label: string }[]> = {
     { href: "/dashboard/supplier", label: "Dashboard" },
     { href: "/dashboard/supplier/products", label: "Products" },
     { href: "/dashboard/supplier/requests", label: "Incoming Requests" },
+    { href: "/dashboard/supplier/auctions", label: "Live Auctions" },
     { href: "/dashboard/supplier/orders", label: "Orders" },
   ],
   admin: [{ href: "/dashboard/admin", label: "Admin Overview" }],

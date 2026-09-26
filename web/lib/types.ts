@@ -21,6 +21,7 @@ export interface SupplierProfile {
   verification: "unverified" | "basic" | "business" | "buildmart";
   minOrderNote?: string;
   paymentTerms: string[];
+  description?: string; // short business bio shown on the marketplace
 }
 
 export interface Product {
@@ -31,6 +32,8 @@ export interface Product {
   unit: string; // "bag" | "tonne" | "piece" | "cu.m" etc.
   pricePerUnit: number;
   stockQty: number | null; // null = "availability needs confirmation"
+  description?: string;
+  featured?: boolean; // supplier can pin this to the top of their catalogue / marketplace results
 }
 
 export interface Project {
@@ -71,6 +74,7 @@ export interface Quote {
   stockNote: string;
   validUntil: string; // ISO date
   createdAt: string;
+  updatedAt?: string; // set when a supplier revises a live bid
   isSimulated: boolean; // true = auto-generated demo quote, not a real supplier
 }
 

@@ -3,7 +3,7 @@
 import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Search, MapPin, ShieldCheck, ArrowRight } from "lucide-react";
+import { Search, MapPin, ShieldCheck, ArrowRight, Star } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { RangeFinder } from "@/components/sections/range-finder";
@@ -44,9 +44,13 @@ function MarketplaceContent() {
           i.supplier?.company.toLowerCase().includes(q),
       );
     }
-    items.sort((a, b) =>
-      sort === "price" ? a.product.pricePerUnit - b.product.pricePerUnit : a.product.name.localeCompare(b.product.name),
-    );
+    items.sort((a, b) => {
+      const featuredDiff = Number(b.product.featured) - Number(a.product.featured);
+      if (featuredDiff !== 0) return featuredDiff;
+      return sort === "price"
+        ? a.product.pricePerUnit - b.product.pricePerUnit
+        : a.product.name.localeCompare(b.product.name);
+    });
     return items;
   }, [store, category, query, sort]);
 
@@ -110,11 +114,25 @@ function MarketplaceContent() {
             ) : (
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {listings.map(({ product, supplier, profile }) => (
-                  <div key={product.id} className="flex flex-col rounded-2xl border border-border bg-card p-6">
+                  <div
+                    key={product.id}
+                    className={cn(
+                      "flex flex-col rounded-2xl border bg-card p-6",
+                      product.featured ? "border-accent/60 bg-brass-100/10" : "border-border",
+                    )}
+                  >
                     <div className="mb-3 flex items-start justify-between gap-2">
-                      <span className="rounded-full bg-secondary px-2.5 py-1 text-[0.65rem] font-semibold uppercase text-muted-foreground">
-                        {product.category}
-                      </span>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="rounded-full bg-secondary px-2.5 py-1 text-[0.65rem] font-semibold uppercase text-muted-foreground">
+                          {product.category}
+                        </span>
+                        {product.featured && (
+                          <span className="flex items-center gap-1 rounded-full bg-accent px-2.5 py-1 text-[0.65rem] font-semibold uppercase text-accent-foreground">
+                            <Star className="h-2.5 w-2.5 fill-current" />
+                            Featured
+                          </span>
+                        )}
+                      </div>
                       {profile && profile.verification !== "unverified" && (
                         <span className="flex items-center gap-1 text-[0.65rem] font-semibold text-green-700">
                           <ShieldCheck className="h-3 w-3" />
@@ -124,11 +142,14 @@ function MarketplaceContent() {
                     </div>
                     <h3 className="mb-1 font-semibold text-primary">{product.name}</h3>
                     <p className="mb-1 text-sm text-muted-foreground">{supplier?.company}</p>
-                    <div className="mb-4 flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <div className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
                       <MapPin className="h-3 w-3" />
                       {supplier?.city}
                       {profile && <span>· delivers within {profile.deliveryRadiusKm} km</span>}
                     </div>
+                    {product.description && (
+                      <p className="mb-4 text-xs text-muted-foreground">{product.description}</p>
+                    )}
                     <div className="mt-auto flex items-end justify-between border-t border-dashed border-border pt-4">
                       <div>
                         <div className="font-display text-lg font-semibold text-primary">{fmtINR(product.pricePerUnit)}</div>

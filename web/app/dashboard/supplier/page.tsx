@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Package, Inbox, PackageCheck, TrendingUp, Send } from "lucide-react";
+import { Package, Inbox, PackageCheck, TrendingUp, Send, Trophy } from "lucide-react";
 import { DashboardShell, DashboardPageHeader } from "@/components/dashboard/dashboard-shell";
 import { useStore } from "@/lib/store";
 import { useCurrentUser } from "@/lib/use-current-user";
@@ -19,6 +19,14 @@ function SupplierOverviewContent() {
   const openMatchingRequests = store.requests.filter(
     (r) => r.status === "open" && profile?.categories.includes(r.category),
   );
+
+  const leadingCount = openMatchingRequests.filter((r) => {
+    const ranked = store.quotes
+      .filter((q) => q.requestId === r.id)
+      .map((q) => ({ q, total: q.unitPrice * r.quantity + q.freight }))
+      .sort((a, b) => a.total - b.total);
+    return ranked[0]?.q.supplierId === user.id && !ranked[0]?.q.isSimulated;
+  }).length;
 
   return (
     <>
@@ -38,9 +46,10 @@ function SupplierOverviewContent() {
         }
       />
 
-      <div className="mb-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mb-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
         <StatCard label="Products Listed" value={String(myProducts.length)} icon={<Package className="h-5 w-5" />} />
-        <StatCard label="Matching Requests" value={String(openMatchingRequests.length)} icon={<Inbox className="h-5 w-5" />} />
+        <StatCard label="Live Auctions" value={String(openMatchingRequests.length)} icon={<Inbox className="h-5 w-5" />} />
+        <StatCard label="Leading Bids" value={String(leadingCount)} icon={<Trophy className="h-5 w-5" />} accent={leadingCount > 0} />
         <StatCard label="Quotes Sent" value={String(myQuotes.length)} icon={<Send className="h-5 w-5" />} />
         <StatCard label="Orders Won" value={String(myOrders.length)} icon={<PackageCheck className="h-5 w-5" />} />
         <StatCard label="Revenue" value={fmtINR(revenue)} icon={<TrendingUp className="h-5 w-5" />} />
@@ -60,8 +69,8 @@ function SupplierOverviewContent() {
       {openMatchingRequests.length > 0 && (
         <div className="mt-8 rounded-2xl border border-border bg-card p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h3 className="font-semibold text-primary">Requests Matching Your Products</h3>
-            <Link href="/dashboard/supplier/requests" className="text-sm font-semibold text-accent">
+            <h3 className="font-semibold text-primary">Live Auctions Matching Your Products</h3>
+            <Link href="/dashboard/supplier/auctions" className="text-sm font-semibold text-accent">
               View all
             </Link>
           </div>
@@ -74,8 +83,8 @@ function SupplierOverviewContent() {
                   </div>
                   <div className="text-muted-foreground">{r.deliveryLocation}</div>
                 </div>
-                <Link href="/dashboard/supplier/requests" className="text-sm font-semibold text-accent">
-                  Quote →
+                <Link href="/dashboard/supplier/auctions" className="text-sm font-semibold text-accent">
+                  Bid →
                 </Link>
               </li>
             ))}
@@ -86,11 +95,27 @@ function SupplierOverviewContent() {
   );
 }
 
-function StatCard({ label, value, icon }: { label: string; value: string; icon: React.ReactNode }) {
+function StatCard({
+  label,
+  value,
+  icon,
+  accent,
+}: {
+  label: string;
+  value: string;
+  icon: React.ReactNode;
+  accent?: boolean;
+}) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6">
-      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-brass-300">{icon}</div>
-      <div className="font-display text-2xl font-semibold text-primary">{value}</div>
+    <div className={`rounded-2xl border p-6 ${accent ? "border-green-600/50 bg-green-600/5" : "border-border bg-card"}`}>
+      <div
+        className={`mb-3 flex h-10 w-10 items-center justify-center rounded-lg ${
+          accent ? "bg-green-600 text-white" : "bg-primary text-brass-300"
+        }`}
+      >
+        {icon}
+      </div>
+      <div className={`font-display text-2xl font-semibold ${accent ? "text-green-700" : "text-primary"}`}>{value}</div>
       <div className="text-sm text-muted-foreground">{label}</div>
     </div>
   );
