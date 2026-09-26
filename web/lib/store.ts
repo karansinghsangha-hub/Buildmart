@@ -69,16 +69,36 @@ function emptyData(): StoreData {
 let cache: StoreData | null = null;
 const listeners = new Set<() => void>();
 
+/**
+ * Backfills anything a browser's already-saved store predates — a field
+ * that didn't exist yet (savedSuppliers) or, critically, the seed
+ * contractor/project/requests/quotes added later for Live Auctions. Without
+ * this, `load()` only ever calls emptyData() for a *brand-new* browser with
+ * no saved store at all — anyone who already had one (including this
+ * project's own tester, mid-session) would keep their old data forever and
+ * never receive the new seed requests, so the auction board stays
+ * permanently empty for them specifically. Matching by id, so it's a no-op
+ * once a browser already has these.
+ */
+function migrate(d: StoreData): StoreData {
+  if (!d.savedSuppliers) d.savedSuppliers = [];
+  if (!d.users.some((u) => u.id === SEED_CONTRACTOR.id)) d.users.push(SEED_CONTRACTOR);
+  if (!d.projects.some((p) => p.id === SEED_PROJECT.id)) d.projects.push(SEED_PROJECT);
+  for (const r of SEED_REQUESTS) {
+    if (!d.requests.some((x) => x.id === r.id)) d.requests.push(r);
+  }
+  for (const q of SEED_QUOTES) {
+    if (!d.quotes.some((x) => x.id === q.id)) d.quotes.push(q);
+  }
+  return d;
+}
+
 function load(): StoreData {
   if (cache) return cache;
   if (typeof window === "undefined") return emptyData();
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
-    cache = raw ? (JSON.parse(raw) as StoreData) : emptyData();
-    // A browser that already has a saved v1 instance from before a field
-    // was added (e.g. savedSuppliers) won't have it in its parsed JSON —
-    // default it in rather than crash the first component that reads it.
-    if (!cache.savedSuppliers) cache.savedSuppliers = [];
+    cache = migrate(raw ? (JSON.parse(raw) as StoreData) : emptyData());
   } catch {
     cache = emptyData();
   }
