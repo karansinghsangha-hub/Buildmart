@@ -39,18 +39,19 @@ export default function ContactPage() {
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-brass-300">Reach Us Directly</span>
 
               <InfoLine icon={<MapPin className="h-[19px] w-[19px]" />} title="Based in">
-                Gurugram, India
+                Hyderabad, Telangana
               </InfoLine>
               <InfoLine icon={<Phone className="h-[19px] w-[19px]" />} title="Call Us">
-                +91 98100 45672
+                +91 95509 05558
               </InfoLine>
               <InfoLine icon={<Mail className="h-[19px] w-[19px]" />} title="Email Us">
                 hello@buildmart.co.in
               </InfoLine>
 
               <p className="mt-2 rounded-lg bg-white/5 p-4 text-sm text-[#faf7f0]/60">
-                BuildMart is an early-stage marketplace, currently onboarding contractors and suppliers. If
-                you&apos;re a supplier interested in joining, mention your product categories and city.
+                BuildMart is an early-stage marketplace, founded in 2025 by Karan Singh Sangha, currently
+                onboarding contractors and suppliers. If you&apos;re a supplier interested in joining, mention
+                your product categories and city.
               </p>
             </div>
           </div>

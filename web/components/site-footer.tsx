@@ -77,13 +77,13 @@ export function SiteFooter() {
             <div className="space-y-3 text-sm">
               <div className="flex gap-2.5">
                 <Phone className="mt-0.5 h-4 w-4 flex-none text-brass-300" />
-                <span>+91 98100 45672</span>
+                <span>+91 95509 05558</span>
               </div>
               <div className="flex gap-2.5">
                 <Mail className="mt-0.5 h-4 w-4 flex-none text-brass-300" />
                 <span>hello@buildmart.co.in</span>
               </div>
-              <div className="text-[#faf7f0]/50">Gurugram, India</div>
+              <div className="text-[#faf7f0]/50">Hyderabad, Telangana</div>
             </div>
           </div>
         </div>

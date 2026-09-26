@@ -15,6 +15,7 @@ const navByRole: Record<Role | "admin", { href: string; label: string }[]> = {
     { href: "/dashboard/contractor/projects", label: "My Projects" },
     { href: "/marketplace", label: "Marketplace" },
     { href: "/dashboard/contractor/requests", label: "Procurement Requests" },
+    { href: "/dashboard/contractor/saved", label: "Saved Suppliers" },
     { href: "/dashboard/contractor/orders", label: "Orders" },
   ],
   supplier: [
@@ -22,6 +23,7 @@ const navByRole: Record<Role | "admin", { href: string; label: string }[]> = {
     { href: "/dashboard/supplier/products", label: "Products" },
     { href: "/dashboard/supplier/requests", label: "Incoming Requests" },
     { href: "/dashboard/supplier/auctions", label: "Live Auctions" },
+    { href: "/dashboard/supplier/quotes", label: "Quote History" },
     { href: "/dashboard/supplier/orders", label: "Orders" },
   ],
   admin: [{ href: "/dashboard/admin", label: "Admin Overview" }],

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Plus, Star, Pencil, Trash2, X, Check } from "lucide-react";
+import { Plus, Star, Pencil, Trash2, X, Check, Minus } from "lucide-react";
 import { DashboardShell, DashboardPageHeader } from "@/components/dashboard/dashboard-shell";
 import {
   useStore,
@@ -9,6 +9,7 @@ import {
   updateProduct,
   deleteProduct,
   toggleProductFeatured,
+  adjustProductStock,
   setSupplierRadius,
   updateSupplierProfile,
 } from "@/lib/store";
@@ -214,13 +215,31 @@ function ProductRow({ product: p, onEdit }: { product: Product; onEdit: () => vo
         <div className="font-semibold text-primary">
           {fmtINR(p.pricePerUnit)} <span className="font-normal text-muted-foreground">/ {p.unit}</span>
         </div>
-        <div className="text-xs">
+        <div className="flex items-center justify-end gap-1.5 text-xs">
           {p.stockQty == null ? (
             <span className="text-muted-foreground">Availability needs confirmation</span>
-          ) : p.stockQty > 0 ? (
-            <span className="text-green-700">In stock · {p.stockQty}</span>
           ) : (
-            <span className="text-destructive">Out of stock</span>
+            <>
+              <button
+                type="button"
+                onClick={() => adjustProductStock(p.id, -1)}
+                className="flex h-5 w-5 items-center justify-center rounded border border-border text-muted-foreground hover:border-accent hover:text-accent"
+              >
+                <Minus className="h-2.5 w-2.5" />
+              </button>
+              {p.stockQty > 0 ? (
+                <span className="text-green-700">In stock · {p.stockQty}</span>
+              ) : (
+                <span className="text-destructive">Out of stock</span>
+              )}
+              <button
+                type="button"
+                onClick={() => adjustProductStock(p.id, 1)}
+                className="flex h-5 w-5 items-center justify-center rounded border border-border text-muted-foreground hover:border-accent hover:text-accent"
+              >
+                <Plus className="h-2.5 w-2.5" />
+              </button>
+            </>
           )}
         </div>
       </div>

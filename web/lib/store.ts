@@ -37,12 +37,13 @@ import {
 } from "./types";
 import { CATEGORIES } from "./categories";
 import { SEED_SUPPLIERS, SEED_PRODUCTS } from "./seed-suppliers";
+import { SEED_CONTRACTOR, SEED_PROJECT, SEED_REQUESTS, SEED_QUOTES } from "./seed-requests";
 
 const STORAGE_KEY = "buildmart:v1";
 
 function emptyData(): StoreData {
   return {
-    users: [...SEED_SUPPLIERS],
+    users: [...SEED_SUPPLIERS, SEED_CONTRACTOR],
     supplierProfiles: SEED_SUPPLIERS.map((u) => ({
       userId: u.id,
       categories: SEED_PRODUCTS.filter((p) => p.supplierId === u.id).map((p) => p.category),
@@ -51,10 +52,16 @@ function emptyData(): StoreData {
       paymentTerms: ["Bank transfer", "Cheque"],
     })),
     products: [...SEED_PRODUCTS],
-    projects: [],
-    requests: [],
-    quotes: [],
+    projects: [SEED_PROJECT],
+    // Seed a handful of already-open, already-quoted requests (see
+    // seed-requests.ts) so Live Auctions has something real to bid on for
+    // any supplier signing up alone — without this, a lone browser session
+    // has zero procurement requests at all and the auction board is always
+    // empty, which reads as broken rather than as "nobody's posted yet".
+    requests: [...SEED_REQUESTS],
+    quotes: [...SEED_QUOTES],
     orders: [],
+    savedSuppliers: [],
     currentUserId: null,
   };
 }
@@ -68,6 +75,10 @@ function load(): StoreData {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     cache = raw ? (JSON.parse(raw) as StoreData) : emptyData();
+    // A browser that already has a saved v1 instance from before a field
+    // was added (e.g. savedSuppliers) won't have it in its parsed JSON —
+    // default it in rather than crash the first component that reads it.
+    if (!cache.savedSuppliers) cache.savedSuppliers = [];
   } catch {
     cache = emptyData();
   }
@@ -279,6 +290,16 @@ export function createRequest(input: {
   return request;
 }
 
+/** Closes a still-open request without awarding it (the contractor's own request only). */
+export function cancelRequest(requestId: string): void {
+  mutate((d) => {
+    const request = d.requests.find((r) => r.id === requestId);
+    if (request && request.status === "open" && request.contractorId === d.currentUserId) {
+      request.status = "cancelled";
+    }
+  });
+}
+
 // --------------------------------------------------------------- quotes
 export function submitQuote(input: {
   requestId: string;
@@ -412,6 +433,14 @@ export function toggleProductFeatured(productId: string): void {
   });
 }
 
+/** Quick +/- stock adjustment. No-ops on a product whose stock isn't tracked as a number. */
+export function adjustProductStock(productId: string, delta: number): void {
+  mutate((d) => {
+    const product = d.products.find((p) => p.id === productId && p.supplierId === d.currentUserId);
+    if (product && product.stockQty != null) product.stockQty = Math.max(0, product.stockQty + delta);
+  });
+}
+
 export function setSupplierRadius(km: number) {
   mutate((d) => {
     const sp = d.supplierProfiles.find((s) => s.userId === d.currentUserId);
@@ -428,6 +457,20 @@ export function updateSupplierProfile(input: {
   mutate((d) => {
     const sp = d.supplierProfiles.find((s) => s.userId === d.currentUserId);
     if (sp) Object.assign(sp, input);
+  });
+}
+
+// ----------------------------------------------------------- saved suppliers
+export function toggleSaveSupplier(supplierId: string): void {
+  mutate((d) => {
+    const contractorId = d.currentUserId;
+    if (!contractorId) return;
+    const existing = d.savedSuppliers.find((s) => s.contractorId === contractorId && s.supplierId === supplierId);
+    if (existing) {
+      d.savedSuppliers = d.savedSuppliers.filter((s) => s !== existing);
+    } else {
+      d.savedSuppliers.push({ contractorId, supplierId, savedAt: new Date().toISOString() });
+    }
   });
 }
 

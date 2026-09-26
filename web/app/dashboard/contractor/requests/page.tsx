@@ -2,9 +2,9 @@
 
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Clock, Check, Loader2 } from "lucide-react";
+import { Plus, Clock, Check, Loader2, Ban } from "lucide-react";
 import { DashboardShell, DashboardPageHeader } from "@/components/dashboard/dashboard-shell";
-import { useStore, createRequest, acceptQuote } from "@/lib/store";
+import { useStore, createRequest, acceptQuote, cancelRequest } from "@/lib/store";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { CATEGORIES, CATEGORY_UNITS } from "@/lib/categories";
 import { fmtINR, fmtDate } from "@/lib/format";
@@ -223,6 +223,7 @@ function RequestsContent() {
                             "rounded-full px-2 py-0.5 text-[0.65rem] font-semibold uppercase",
                             r.status === "open" && "bg-brass-100 text-brass-600",
                             r.status === "awarded" && "bg-green-100 text-green-700",
+                            r.status === "cancelled" && "bg-secondary text-muted-foreground",
                           )}
                         >
                           {r.status}
@@ -246,18 +247,39 @@ function RequestsContent() {
                         {fmtDate(selected.requiredBy)}
                       </p>
                     </div>
-                    <span
-                      className={cn(
-                        "rounded-full px-3 py-1 text-xs font-semibold uppercase",
-                        selected.status === "open" && "bg-brass-100 text-brass-600",
-                        selected.status === "awarded" && "bg-green-100 text-green-700",
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={cn(
+                          "rounded-full px-3 py-1 text-xs font-semibold uppercase",
+                          selected.status === "open" && "bg-brass-100 text-brass-600",
+                          selected.status === "awarded" && "bg-green-100 text-green-700",
+                          selected.status === "cancelled" && "bg-secondary text-muted-foreground",
+                        )}
+                      >
+                        {selected.status}
+                      </span>
+                      {selected.status === "open" && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (window.confirm("Cancel this procurement request? Suppliers will no longer be able to quote on it.")) {
+                              cancelRequest(selected.id);
+                            }
+                          }}
+                          className="flex items-center gap-1 rounded-full border border-border px-3 py-1 text-xs font-semibold text-muted-foreground hover:border-destructive hover:text-destructive"
+                        >
+                          <Ban className="h-3 w-3" />
+                          Cancel
+                        </button>
                       )}
-                    >
-                      {selected.status}
-                    </span>
+                    </div>
                   </div>
 
-                  {selectedQuotes.length === 0 ? (
+                  {selected.status === "cancelled" ? (
+                    <div className="rounded-lg bg-secondary/60 p-5 text-sm text-muted-foreground">
+                      This request was cancelled — suppliers can no longer quote on it.
+                    </div>
+                  ) : selectedQuotes.length === 0 ? (
                     <div className="flex items-center gap-2.5 rounded-lg bg-secondary/60 p-5 text-sm text-muted-foreground">
                       <Loader2 className="h-4 w-4 animate-spin" />
                       Waiting for matched suppliers to respond — quotes typically arrive within moments.

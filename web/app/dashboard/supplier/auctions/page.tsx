@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState, type FormEvent } from "react";
-import { Gavel, Trophy, TrendingDown, Clock, X } from "lucide-react";
+import Link from "next/link";
+import { Gavel, Trophy, TrendingDown, Clock, X, Tag } from "lucide-react";
 import { DashboardShell, DashboardPageHeader } from "@/components/dashboard/dashboard-shell";
 import { useStore, submitQuote, reviseQuote, withdrawQuote } from "@/lib/store";
 import { useCurrentUser } from "@/lib/use-current-user";
@@ -43,7 +44,26 @@ function AuctionsContent() {
 
       {auctions.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border p-12 text-center text-muted-foreground">
-          No live auctions right now. Add more categories to your business profile to widen your matches.
+          {!profile?.categories.length ? (
+            <>
+              <Tag className="mx-auto mb-3 h-6 w-6 text-accent" />
+              <p className="mb-3">
+                You haven&apos;t set any product categories yet, so nothing can match you — auctions are filtered to
+                categories you actually deal in.
+              </p>
+              <Link href="/dashboard/supplier/products" className="text-sm font-semibold text-accent">
+                Add a product or pick categories in your Business Profile →
+              </Link>
+            </>
+          ) : (
+            <>
+              No open requests in your categories ({profile.categories.join(", ")}) right now — check back soon, or{" "}
+              <Link href="/dashboard/supplier/products" className="font-semibold text-accent">
+                widen your categories
+              </Link>
+              .
+            </>
+          )}
         </div>
       ) : (
         <div className="space-y-5">

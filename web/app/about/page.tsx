@@ -46,6 +46,10 @@ export default function AboutPage() {
               BuildMart was created to bring modern marketplace technology, location intelligence and structured
               procurement into construction — starting with the materials themselves.
             </p>
+            <p className="mt-5 text-lg leading-relaxed text-muted-foreground">
+              Founded in 2025 by <strong className="text-primary">Karan Singh Sangha</strong>, Founder &amp; CEO,
+              and headquartered in Hyderabad, Telangana.
+            </p>
 
             <div className="mt-12 rounded-2xl border border-accent/30 bg-brass-100/40 p-6 text-sm text-primary">
               <div className="mb-1 flex items-center gap-2 font-semibold">

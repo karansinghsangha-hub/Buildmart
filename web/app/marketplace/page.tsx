@@ -3,11 +3,11 @@
 import { Suspense, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Search, MapPin, ShieldCheck, ArrowRight, Star } from "lucide-react";
+import { Search, MapPin, ShieldCheck, ArrowRight, Star, Bookmark } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { RangeFinder } from "@/components/sections/range-finder";
-import { useStore } from "@/lib/store";
+import { useStore, toggleSaveSupplier } from "@/lib/store";
 import { useCurrentUser } from "@/lib/use-current-user";
 import { CATEGORIES } from "@/lib/categories";
 import { fmtINR } from "@/lib/format";
@@ -27,6 +27,9 @@ function MarketplaceContent() {
   const [query, setQuery] = useState(params.get("q") ?? "");
   const [category, setCategory] = useState<string>("All");
   const [sort, setSort] = useState<"price" | "name">("price");
+
+  const isSaved = (supplierId: string) =>
+    user != null && store.savedSuppliers.some((s) => s.contractorId === user.id && s.supplierId === supplierId);
 
   const listings = useMemo(() => {
     let items = store.products.map((p) => {
@@ -133,12 +136,29 @@ function MarketplaceContent() {
                           </span>
                         )}
                       </div>
-                      {profile && profile.verification !== "unverified" && (
-                        <span className="flex items-center gap-1 text-[0.65rem] font-semibold text-green-700">
-                          <ShieldCheck className="h-3 w-3" />
-                          {verificationLabel[profile.verification]}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {profile && profile.verification !== "unverified" && (
+                          <span className="flex items-center gap-1 text-[0.65rem] font-semibold text-green-700">
+                            <ShieldCheck className="h-3 w-3" />
+                            {verificationLabel[profile.verification]}
+                          </span>
+                        )}
+                        {user?.role === "contractor" && supplier && (
+                          <button
+                            type="button"
+                            onClick={() => toggleSaveSupplier(supplier.id)}
+                            title={isSaved(supplier.id) ? "Remove from saved suppliers" : "Save this supplier"}
+                            className={cn(
+                              "flex h-6 w-6 items-center justify-center rounded-full border",
+                              isSaved(supplier.id)
+                                ? "border-accent bg-accent text-accent-foreground"
+                                : "border-border text-muted-foreground hover:border-accent hover:text-accent",
+                            )}
+                          >
+                            <Bookmark className={cn("h-3 w-3", isSaved(supplier.id) && "fill-current")} />
+                          </button>
+                        )}
+                      </div>
                     </div>
                     <h3 className="mb-1 font-semibold text-primary">{product.name}</h3>
                     <p className="mb-1 text-sm text-muted-foreground">{supplier?.company}</p>

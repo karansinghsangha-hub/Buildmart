@@ -119,6 +119,12 @@ export interface Order {
   createdAt: string;
 }
 
+export interface SavedSupplier {
+  contractorId: string;
+  supplierId: string;
+  savedAt: string;
+}
+
 export interface StoreData {
   users: UserAccount[];
   supplierProfiles: SupplierProfile[];
@@ -127,5 +133,6 @@ export interface StoreData {
   requests: ProcurementRequest[];
   quotes: Quote[];
   orders: Order[];
+  savedSuppliers: SavedSupplier[];
   currentUserId: string | null;
 }
